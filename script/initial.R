@@ -40,7 +40,7 @@ ggplot(training_data, aes(x = rent_full)) +
   labs(title = "Density of Rent Full", x = "Rent Full", y = "Density")
 
 # Mean price per canton
-mean_rent <- aggregate(rent_full ~ KTKZ, data = training_clean, mean)
+mean_rent <- aggregate(rent_full ~ KTKZ, data = training_data, mean)
 ggplot(mean_rent, aes(x = KTKZ, y = rent_full)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   theme_minimal() +
@@ -67,18 +67,18 @@ str(training_data$KTKZ)
 str(training_data$newly_built)
 
 data_matrix <- model.matrix(rent_full ~ msregion + home_type + newly_built  + 
-                              Micro_rating + Micro_rating_NoiseAndEmission + Micro_rating_Accessibility + 
+                              Micro_rating_NoiseAndEmission + Micro_rating_Accessibility + 
                               Micro_rating_DistrictAndArea + Micro_rating_SunAndView + 
                               Micro_rating_ServicesAndNature + apoth_pix_count_km2 + 
                               dist_to_4G + dist_to_5G + dist_to_train_stat + restaur_pix_count_km2 + 
                               superm_pix_count_km2 + dist_to_river, 
-                            data = training_clean) # + tried with cantons instead of msregion
+                            data = training_data) # + tried with cantons instead of msregion
 
 # Lasso regression with cross-validation
 set.seed(123) # for reproducibility
-cv_lasso <- cv.glmnet(data_matrix, training_clean$rent_full, alpha = 1, type.measure = "mse", nfolds = 10)
+cv_lasso <- cv.glmnet(data_matrix, training_data$rent_full, alpha = 1, type.measure = "mse", nfolds = 10)
 best_lambda <- cv_lasso$lambda.min
-lasso <- glmnet(data_matrix, training_clean$rent_full, alpha = 1, lambda = best_lambda)
+lasso <- glmnet(data_matrix, training_data$rent_full, alpha = 1, lambda = best_lambda)
 plot(cv_lasso)
 # Extracting the coefficients of the model
 selected_var <- coef(lasso, s = best_lambda)
@@ -90,7 +90,19 @@ test_set <- training_data[-index, ]
 lm_model <- train(rent_full ~ msregion + home_type + newly_built  + 
                     Micro_rating_NoiseAndEmission + Micro_rating_Accessibility + 
                     Micro_rating_DistrictAndArea + Micro_rating_SunAndView + 
-                    Micro_rating_ServicesAndNature + 
+                    Micro_rating_ServicesAndNature + apoth_pix_count_km2 + 
                     dist_to_4G + dist_to_5G + dist_to_train_stat + restaur_pix_count_km2 + 
                     superm_pix_count_km2 + dist_to_river, data = train_set, method = "lm")
 summary(lm_model)
+
+rf_model <- randomForest(rent_full ~ msregion + home_type + newly_built + 
+                           Micro_rating_NoiseAndEmission + Micro_rating_Accessibility + 
+                           Micro_rating_DistrictAndArea + Micro_rating_SunAndView + 
+                           Micro_rating_ServicesAndNature + apoth_pix_count_km2 + 
+                           dist_to_4G + dist_to_5G + dist_to_train_stat + restaur_pix_count_km2 + 
+                           superm_pix_count_km2 + dist_to_river, 
+                         data = train_set)
+
+# Summary of the model
+summary(rf_model)
+rf_model$predicted
