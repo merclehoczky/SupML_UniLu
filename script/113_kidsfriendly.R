@@ -1,4 +1,4 @@
-#### Kids_friendly
+#### Kids_friendly ----
 # Specify the keywords for kids allowed in multiple languages
 keywords_kids_allowed <- c("kids", "children", 
                            "enfants", 

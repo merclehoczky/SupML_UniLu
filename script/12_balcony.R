@@ -1,7 +1,9 @@
 #### Balcony ----
 
 # Specify the keywords_balcony for balcony in multiple languages
-keywords_balcony <- c("balcony", "balcone", "balcon", "Balkon")
+keywords_balcony <- c("balcony", "balcone", "balcon", "Balkon", 
+                      "terrace", "terrazza", "terrazzo", "terrasse", "Terrasse", 
+                      "veranda", "Veranda", "véranda")
 
 # Specify the negations_balcony
 negations_balcony <- c("no", "non", "not", "nicht", "pas de balcon", "nessun balcone", "kein Balkon")
@@ -17,12 +19,11 @@ data$balcony_new <- sapply(data$balcony_matches, function(matches) {
   }
   check_for_negation(matches, negations_balcony)
 })
-
-# Set balcony_check to 1 if any of balcony or balcony_new is 1
-data$balcony_check <- ifelse(data$balcony == 1 | data$balcony_new == 1, 1, NA)
+# Merge terrace, veranda and balcony (if any is 1, balcony_check is 1) 
+data$balcony_check <- ifelse(data$terrace == 1 | data$veranda == 1 | data$balcony == 1 | data$balcony_new == 1, 1, NA)
 
 # Check if done correct
-balcony_subset <- data[c("balcony", "balcony_new", "balcony_check")]
+balcony_subset <- data[c("balcony", "balcony_new", "terrace", "veranda",  "balcony_check")]
 # Print the results
 summary(balcony_subset)
 
@@ -30,4 +31,4 @@ summary(balcony_subset)
 # Save balcony_check into balcony
 data$balcony <- data$balcony_check
 # Drop other balcony columns
-data <- subset(data, select = -c(balcony_matches, balcony_new, balcony_check))
+data <- subset(data, select = -c(balcony_matches, balcony_new, balcony_check, terrace, veranda))
