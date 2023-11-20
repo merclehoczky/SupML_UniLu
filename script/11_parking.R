@@ -1,41 +1,43 @@
-library(stringr)
-
-
-
-# Function to extract surrounding words
-extract_surrounding_words <- function(text, keywords) {
-  if (is.na(text)) {
-    return(NA)
-  }
-  # Use the (?i) flag for case-insensitive matching
-  regex_pattern <- paste0("(?i)(\\S+\\s+){0,2}(", paste0(keywords, collapse = "|"), ")(\\s+\\S+){0,2}")
-  matches <- str_extract_all(text, regex_pattern)
-  matches <- unlist(matches)
-  matches[matches == "character(0)"] <- NA
-  return(unlist(matches))
-}
-
-
-
-# Function to check for negations
-check_for_negation <- function(matches, negations) {
-  if (is.na(matches) || any(sapply(negations, function(neg) any(grepl(paste0("\\b", neg, "\\b"), matches, ignore.case = TRUE))))) {
-    return(0)
-  } else {
-    return(1)
-  }
-}
-
-
+#### Parking -------------------------------------------------------------------
 # Specify the keywords for parking in multiple languages
 keywords <- c("parking", "parcheggio", "stationnement", "Parken", "Parkplatz", "Parkmöglichkeit", "garage")
 
 # Specify the negations
 negations <- c( "no", "non", "not", "nicht", "kein Parkplatz", "keine Garage")
 
-# Apply the function to the 'descr' column
-training_data$parking_matches <- sapply(training_data$descr, function(text) extract_surrounding_words(text, keywords))
-training_data$parking_matches <- sapply(training_data$parking_matches, function(matches) ifelse(length(matches) == 0, NA, matches))
-training_data$parking <- sapply(training_data$parking_matches, function(matches) check_for_negation(matches, negations))
+# Find keywords in "desc" and turn everything else (character(0)) into NA
+data$parking_matches <- sapply(data$descr, function(text) extract_surrounding_words(text, keywords))
+data$parking_matches <- sapply(data$parking_matches, function(matches) ifelse(length(matches) == 0, NA, matches))
+#data$parking[is.na(data$parking_matches)] <- NA
+
+# Find negations indicating no parking
+data$parking <- sapply(data$parking_matches, function(matches) {
+  if (is.na(matches)) {
+    return(NA)
+  }
+  check_for_negation(matches, negations)
+})
+
+# Set parking to 1 if any of parking, parking_indoor, or parking_outside is 1
+# Merge indoor and outdoor parking 
+data$parking_check <- ifelse(data$parking_indoor == 1 | data$parking_outside == 1, 1, NA)
+# 
+data$parking_check <- ifelse(
+  data$parking == 1 | data$parking_check == 1, 1, 
+  ifelse(is.na(data$parking) & is.na(data$parking_check), NA, 
+         ifelse(data$parking == 0 & is.na(data$parking_check), 0, NA))
+)
+data$parking_check[data$parking == 0 & is.na(data$parking_check)] <- 0
+
+# Check if done correct
+parking_subset <- data[c("parking", "parking_indoor", "parking_outside", "parking_check")]
 # Print the results
-print(training_data$parking_matches)
+summary(parking_subset)
+
+# Clean up columns
+# Save parking_check into parking
+data$parking <- data$parking_check
+# Drop other parking columns
+data <- subset(data, select = -c(parking_indoor, parking_outside, parking_check, parking_matches))
+
+
