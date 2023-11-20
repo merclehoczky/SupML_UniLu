@@ -1,21 +1,21 @@
 #### Balcony ----
 
-# Specify the keywords for balcony in multiple languages
-keywords <- c("balcony", "balcone", "balcon", "Balkon")
+# Specify the keywords_balcony for balcony in multiple languages
+keywords_balcony <- c("balcony", "balcone", "balcon", "Balkon")
 
-# Specify the negations
-negations <- c("no", "non", "not", "nicht", "pas de balcon", "nessun balcone", "kein Balkon")
+# Specify the negations_balcony
+negations_balcony <- c("no", "non", "not", "nicht", "pas de balcon", "nessun balcone", "kein Balkon")
 
-# Find keywords in "desc" and turn everything else (character(0)) into NA
-data$balcony_matches <- sapply(data$descr, function(text) extract_surrounding_words(text, keywords))
+# Find keywords_balcony in "desc" and turn everything else (character(0)) into NA
+data$balcony_matches <- sapply(data$descr, function(text) extract_surrounding_words(text, keywords_balcony))
 data$balcony_matches <- sapply(data$balcony_matches, function(matches) ifelse(length(matches) == 0, NA, matches))
 
-# Find negations indicating balcony or no balcony
+# Find negations_balcony indicating balcony or no balcony
 data$balcony_new <- sapply(data$balcony_matches, function(matches) {
   if (is.na(matches)) {
     return(NA)
   }
-  check_for_negation(matches, negations)
+  check_for_negation(matches, negations_balcony)
 })
 
 # Set balcony_check to 1 if any of balcony or balcony_new is 1

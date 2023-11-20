@@ -1,21 +1,21 @@
 #### Parking -------------------------------------------------------------------
-# Specify the keywords for parking in multiple languages
-keywords <- c("parking", "parcheggio", "stationnement", "Parken", "Parkplatz", "Parkmöglichkeit", "garage")
+# Specify the keywords_parking_balcony for parking in multiple languages
+keywords_parking_balcony <- c("parking", "parcheggio", "stationnement", "Parken", "Parkplatz", "Parkmöglichkeit", "garage")
 
-# Specify the negations
-negations <- c( "no", "non", "not", "nicht", "kein Parkplatz", "keine Garage")
+# Specify the negations_parking_balcony
+negations_parking_balcony <- c( "no", "non", "not", "nicht", "kein Parkplatz", "keine Garage")
 
-# Find keywords in "desc" and turn everything else (character(0)) into NA
-data$parking_matches <- sapply(data$descr, function(text) extract_surrounding_words(text, keywords))
+# Find keywords_parking_balcony in "desc" and turn everything else (character(0)) into NA
+data$parking_matches <- sapply(data$descr, function(text) extract_surrounding_words(text, keywords_parking_balcony))
 data$parking_matches <- sapply(data$parking_matches, function(matches) ifelse(length(matches) == 0, NA, matches))
 #data$parking[is.na(data$parking_matches)] <- NA
 
-# Find negations indicating no parking
+# Find negations_parking_balcony indicating no parking
 data$parking <- sapply(data$parking_matches, function(matches) {
   if (is.na(matches)) {
     return(NA)
   }
-  check_for_negation(matches, negations)
+  check_for_negation(matches, negations_parking_balcony)
 })
 
 # Set parking to 1 if any of parking, parking_indoor, or parking_outside is 1
