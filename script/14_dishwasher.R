@@ -25,9 +25,9 @@ data$dishwasher_check <- ifelse(data$dishwasher == 1 | data$dishwasher_new == 1,
 data$dishwasher_check[data$dishwasher_new == 0 & is.na(data$dishwasher)] <- 0
 
 # Check if done correctly
-dishwasher_subset_check <- data[c("dishwasher", "dishwasher_new", "dishwasher_check")]
+dishwasher_subset <- data[c("dishwasher", "dishwasher_new", "dishwasher_check")]
 # Print the results
-summary(dishwasher_subset_check)
+summary(dishwasher_subset)
 
 # Clean up columns
 # Save dishwasher_check into dishwasher
