@@ -19,15 +19,15 @@ data$parking <- sapply(data$parking_matches, function(matches) {
 })
 
 # Set parking to 1 if any of parking, parking_indoor, or parking_outside is 1
-# Merge indoor and outdoor parking 
+# Merge indoor and outdoor parking (if any is 1, parking_check is 1)
 data$parking_check <- ifelse(data$parking_indoor == 1 | data$parking_outside == 1, 1, NA)
-# 
+# Summarise parking
 data$parking_check <- ifelse(
-  data$parking == 1 | data$parking_check == 1, 1, 
-  ifelse(is.na(data$parking) & is.na(data$parking_check), NA, 
-         ifelse(data$parking == 0 & is.na(data$parking_check), 0, NA))
+  data$parking == 1 | data$parking_check == 1, 1, # If parking or parking_check is 1, parking_check is 1
+  ifelse(is.na(data$parking) & is.na(data$parking_check), NA, # If parking is NA and parking_check is NA, keep NA
+         ifelse(data$parking == 0 & is.na(data$parking_check), 0, NA)) # If parking is 0 and parking_check is NA, change parking_check to 0, else NA
 )
-data$parking_check[data$parking == 0 & is.na(data$parking_check)] <- 0
+data$parking_check[data$parking == 0 & is.na(data$parking_check)] <- 0 # Where parking is 0 and parking_check is NA, keep 0
 
 # Check if done correct
 parking_subset <- data[c("parking", "parking_indoor", "parking_outside", "parking_check")]
