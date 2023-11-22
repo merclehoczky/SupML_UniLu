@@ -30,5 +30,8 @@ summary(balcony_subset)
 # Clean up columns
 # Save balcony_check into balcony
 data$balcony <- data$balcony_check
+data$balcony[is.na(data$balcony)] <- 0
 # Drop other balcony columns
 data <- subset(data, select = -c(balcony_matches, balcony_new, balcony_check, terrace, veranda))
+
+sum(is.na(data$balcony))
