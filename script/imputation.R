@@ -23,7 +23,7 @@ sum(is.na(data$area))
 sum(is.na(data$rooms))
 
 ##########################################
-# Imputation for anteil_efh, Avg_size_household, Avg_age
+# Imputation for anteil_efh, Avg_size_household, Avg_age, Anteil_auslaend
 imputed_anteil <- mice(data[, c("anteil_efh", "Avg_size_household", "Avg_age", "Anteil_auslaend")], method = 'pmm', m = 5, maxit = 5)
 completed_anteil <- complete(imputed_anteil)
 # Check results 
