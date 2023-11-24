@@ -36,3 +36,13 @@ summary(furnished_subset)
 data$furnished <- data$furnished_check
 # Drop other furnished columns
 data <- subset(data, select = -c(furnished_matches, furnished_new, furnished_check))
+
+summary(data$furnished)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$furnished[is.na(data$furnished)] <- 0
+sum(is.na(data$furnished))
+
+# Turning into binary 
+data$furnished <- as.factor(data$furnished)
+summary(data$furnished)

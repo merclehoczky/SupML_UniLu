@@ -43,3 +43,14 @@ summary(laundry_subset)
 data$laundry <- data$laundry_check
 # Drop other laundry columns
 data <- subset(data, select = -c(laundry_matches, laundry_new, laundry_check))
+
+
+summary(data$laundry)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$laundry[is.na(data$laundry)] <- 0
+sum(is.na(data$laundry))
+
+# Turning into binary 
+data$laundry <- as.factor(data$laundry)
+summary(data$laundry)

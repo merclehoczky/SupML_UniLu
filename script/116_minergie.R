@@ -39,3 +39,13 @@ summary(minergie_subset)
 data$minergie <- data$minergie_check
 # Drop other minergie columns
 data <- subset(data, select = -c(minergie_matches, minergie_new, minergie_check))
+
+summary(data$minergie)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$minergie[is.na(data$minergie)] <- 0
+sum(is.na(data$minergie))
+
+# Turning into binary 
+data$minergie <- as.factor(data$minergie)
+summary(data$minergie)

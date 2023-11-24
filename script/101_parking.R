@@ -40,4 +40,12 @@ data$parking <- data$parking_check
 # Drop other parking columns
 data <- subset(data, select = -c(parking_indoor, parking_outside, parking_check, parking_matches))
 
+summary(data$parking)
 
+# Assuming no indication is negation: Turn NAs into 0
+data$parking[is.na(data$parking)] <- 0
+sum(is.na(data$parking))
+
+# Turning into binary 
+data$parking <- as.factor(data$parking)
+summary(data$parking)

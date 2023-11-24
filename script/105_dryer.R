@@ -34,3 +34,13 @@ summary(dryer_subset)
 data$dryer <- data$dryer_check
 # Drop other dryer columns
 data <- subset(data, select = -c(dryer_matches, dryer_new, dryer_check))
+
+summary(data$dryer)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$dryer[is.na(data$dryer)] <- 0
+sum(is.na(data$dryer))
+
+# Turning into binary 
+data$dryer <- as.factor(data$dryer)
+summary(data$dryer)

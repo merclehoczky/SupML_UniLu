@@ -39,3 +39,14 @@ summary(kids_subset)
 data$kids_friendly <- data$kids_allowed_check
 # Drop other kids_allowed columns
 data <- subset(data, select = -c(kids_allowed_matches, kids_allowed_new, kids_allowed_check))
+
+
+summary(data$kids_friendly)
+
+# Assuming no indication means kids allowed: Turn NAs into 1
+data$kids_friendly[is.na(data$kids_friendly)] <- 1
+sum(is.na(data$kids_friendly))
+
+# Turning into binary 
+data$kids_friendly <- as.factor(data$kids_friendly)
+summary(data$kids_friendly)

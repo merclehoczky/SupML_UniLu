@@ -22,3 +22,4 @@ check_for_negation <- function(matches, negations) {
     return(1)
   }
 }
+

@@ -34,3 +34,13 @@ summary(dishwasher_subset)
 data$dishwasher <- data$dishwasher_check
 # Drop other dishwasher columns
 data <- subset(data, select = -c(dishwasher_matches, dishwasher_new, dishwasher_check))
+
+summary(data$dishwasher)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$dishwasher[is.na(data$dishwasher)] <- 0
+sum(is.na(data$dishwasher))
+
+# Turning into binary 
+data$dishwasher <- as.factor(data$dishwasher)
+summary(data$dishwasher)

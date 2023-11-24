@@ -36,3 +36,13 @@ summary(fireplace_subset)
 data$cheminee <- data$fireplace_check
 # Drop other fireplace columns
 data <- subset(data, select = -c(fireplace_matches, fireplace_new, fireplace_check))
+
+summary(data$cheminee)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$cheminee[is.na(data$cheminee)] <- 0
+sum(is.na(data$cheminee))
+
+# Turning into binary 
+data$cheminee <- as.factor(data$cheminee)
+summary(data$cheminee)

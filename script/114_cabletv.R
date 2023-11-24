@@ -36,3 +36,15 @@ summary(cabletv_subset)
 data$cabletv <- data$cable_tv_check
 # Drop other cable_tv columns
 data <- subset(data, select = -c(cable_tv_matches, cable_tv_new, cable_tv_check))
+
+
+
+summary(data$cabletv)
+
+# Assuming no indication means available: Turn NAs into 1
+data$cabletv[is.na(data$cabletv)] <- 1
+sum(is.na(data$cabletv))
+
+# Turning into binary 
+data$cabletv <- as.factor(data$cabletv)
+summary(data$cabletv)

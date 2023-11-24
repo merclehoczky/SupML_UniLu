@@ -41,3 +41,13 @@ summary(pool_subset)
 data$pool <- data$pool_check
 # Drop other pool columns
 data <- subset(data, select = -c(pool_matches, pool_new, pool_check))
+
+summary(data$pool)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$pool[is.na(data$pool)] <- 0
+sum(is.na(data$pool))
+
+# Turning into binary 
+data$pool <- as.factor(data$pool)
+summary(data$pool)

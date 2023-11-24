@@ -41,3 +41,14 @@ summary(oven_subset)
 data$oven <- data$oven_check
 # Drop other oven columns
 data <- subset(data, select = -c(oven_matches, oven_new, oven_check))
+
+
+summary(data$oven)
+
+# Assuming ovens are present unless indicated otherwise: Turn NAs into 1
+data$oven[is.na(data$oven)] <- 1
+sum(is.na(data$oven))
+
+# Turning into binary 
+data$oven <- as.factor(data$oven)
+summary(data$oven)

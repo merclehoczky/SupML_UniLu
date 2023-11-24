@@ -62,3 +62,13 @@ summary(pets_subset)
 data$pets <- data$pets_check
 # Drop other pets columns
 data <- subset(data, select = -c(pets_matches, pets_new, pets_check))
+
+summary(data$pets)
+
+# Cannot determine default pets_allowed status
+# data$pets[is.na(data$pets)] <- 0
+sum(is.na(data$pets))
+
+# Turning into binary 
+data$pets <- as.factor(data$pets)
+summary(data$pets)

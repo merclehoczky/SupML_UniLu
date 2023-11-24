@@ -34,4 +34,12 @@ data$balcony[is.na(data$balcony)] <- 0
 # Drop other balcony columns
 data <- subset(data, select = -c(balcony_matches, balcony_new, balcony_check, terrace, veranda))
 
+summary(data$balcony)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$balcony[is.na(data$balcony)] <- 0
 sum(is.na(data$balcony))
+
+# Turning into binary 
+data$balcony <- as.factor(data$balcony)
+summary(data$balcony)

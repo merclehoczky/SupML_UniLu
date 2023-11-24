@@ -41,3 +41,13 @@ summary(shared_flat_subset)
 data$shared_flat <- data$shared_flat_check
 # Drop other shared_flat columns
 data <- subset(data, select = -c(shared_flat_matches, shared_flat_new, shared_flat_check))
+
+summary(data$shared_flat)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$shared_flat[is.na(data$shared_flat)] <- 0
+sum(is.na(data$shared_flat))
+
+# Turning into binary 
+data$shared_flat <- as.factor(data$shared_flat)
+summary(data$shared_flat)

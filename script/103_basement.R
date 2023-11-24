@@ -33,3 +33,13 @@ summary(basement_subset)
 data$basement <- data$basement_check
 # Drop other basement columns
 data <- subset(data, select = -c(basement_matches, basement_new, basement_check))
+
+summary(data$basement)
+
+# Assuming no indication is negation: Turn NAs into 0
+data$basement[is.na(data$basement)] <- 0
+sum(is.na(data$basement))
+
+# Turning into binary 
+data$basement <- as.factor(data$basement)
+summary(data$basement)
