@@ -18,7 +18,7 @@ negations_pets <- c(
 )
 
 
-# Mofidy function to extract more surrounding words
+# Modify function to extract more surrounding words
 extract_surrounding_words_more <- function(text, keywords) {
   if (is.na(text)) {
     return(NA)
