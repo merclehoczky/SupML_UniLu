@@ -26,5 +26,12 @@ for(i in 1:nrow(data)) {
 sum(is.na(data$dist_to_haltst))
 
 
+imputed_haltst <- mice(data[, c("dist_to_haltst", "Micro_rating_Accessibility")], method = 'pmm', m = 5, maxit = 5)
+completed_haltst <- complete(imputed_haltst)
+# Check results 
+summary(data$dist_to_haltst)
+summary(completed_haltst$dist_to_haltst)
+data$dist_to_haltst <- completed_haltst$dist_to_haltst
+
 
 
