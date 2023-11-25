@@ -36,3 +36,14 @@ summary(elevator_subset)
 data$elevator <- data$elevator_check
 # Drop other elevator columns
 data <- subset(data, select = -c(elevator_matches, elevator_new, elevator_check))
+
+
+summary(data$elevator)
+
+# Assuming ovens are present unless indicated otherwise: Turn NAs into 0
+data$elevator[is.na(data$elevator)] <- 0
+sum(is.na(data$elevator))
+
+# Turning into binary 
+data$elevator <- as.factor(data$elevator)
+summary(data$elevator)
