@@ -56,7 +56,7 @@ completed_bauperiode <- complete(imputed_bauperiode)
 # Check results 
 summary(data$avg_bauperiode)
 summary(completed_bauperiode$avg_bauperiode)
-data$avg_bauperiode <- completed_sonnen$avg_bauperiode
+data$avg_bauperiode <- completed_bauperiode$avg_bauperiode
 
 
 ############################################
