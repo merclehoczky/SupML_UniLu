@@ -1,6 +1,6 @@
 #### Elevator ----
 # Specify the keywords for elevator in multiple languages
-keywords_elevator <- c("elevator", "ascenseur", "Aufzug", "ascensore")
+keywords_elevator <- c("elevator", "ascenseur", "Aufzug", "ascensore", "lift")
 
 # Specify the negations for elevator
 negations_elevator <- c(
