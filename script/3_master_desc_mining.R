@@ -66,3 +66,6 @@ source("116_minergie.R")
 
 # Run script that looks up playgrounds
 source("117_playground.R")
+
+# Run script that looks up wheelchair accessibility
+source("118_wheelchair.R")
