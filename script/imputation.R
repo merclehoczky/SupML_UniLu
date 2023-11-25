@@ -74,5 +74,21 @@ summary(data$avg_bauperiode)
 summary(completed_bauperiode$avg_bauperiode)
 data$avg_bauperiode <- ifelse(is.na(data$avg_bauperiode), completed_bauperiode$avg_bauperiode, data$avg_bauperiode)
 
+############################################ raised_groundfloor
+# Assuming no indication means negation: Turn NAs into 0
+data$raised_groundfloor[is.na(data$raised_groundfloor)] <- 0
+sum(is.na(data$raised_groundfloor))
+
+
+############################################ shower
+# Assuming no indication means confirmation: Turn NAs into 1
+data$shower[is.na(data$shower)] <- 1
+sum(is.na(data$shower))
+
+
+############################################ toilets
+# Assuming no indication means confirmation: Turn NAs into 1
+data$toilets[is.na(data$toilets)] <- 1
+sum(is.na(data$toilets))
 
 
