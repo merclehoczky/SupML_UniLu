@@ -69,3 +69,7 @@ source("117_playground.R")
 
 # Run script that looks up wheelchair accessibility
 source("118_wheelchair.R")
+
+
+# Save dataset ------------------
+write.csv(data, "../data/after_mining.csv", row.names = FALSE)
