@@ -26,7 +26,7 @@ source("102_balcony.R")
 source("103_basement.R")
 
 # Run script that looks up dishwasher
-source("104_diswasher.R")
+source("104_dishwasher.R")
 
 # Run script that looks up dryer
 source("105_dryer.R")
@@ -55,8 +55,8 @@ source("112_shared_flat.R")
 # Run script that looks up kids_friendly (NA -> 1)
 source("113_kids_friendly.R")
 
-# Run script that looks up cabletv (NA -> 1)
-source("114_cable_tv.R")
+# Run script that looks up cable tv (NA -> 1)
+source("114_cabletv.R")
 
 # Run script that looks up cheminee
 source("115_cheminee.R")
