@@ -79,6 +79,11 @@ data$avg_bauperiode <- ifelse(is.na(data$avg_bauperiode), completed_bauperiode$a
 data$raised_groundfloor[is.na(data$raised_groundfloor)] <- 0
 sum(is.na(data$raised_groundfloor))
 
+############################################ water
+# Assuming no indication means confirmation: Turn NAs into 1
+data$water[is.na(data$water)] <- 1
+sum(is.na(data$water))
+
 
 ############################################ shower
 # Assuming no indication means confirmation: Turn NAs into 1
