@@ -97,3 +97,5 @@ data$toilets[is.na(data$toilets)] <- 1
 sum(is.na(data$toilets))
 
 
+# Save dataset ------------------
+write.csv(data, "../data/after_imput.csv", row.names = FALSE)
