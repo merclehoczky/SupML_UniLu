@@ -1,19 +1,22 @@
+#### Imputation ####
+
 library(mice)
 library(visdat)
 
 # Visualizing missing data 
 vis_miss(data, warn_large_data = FALSE)
 
-##########################################
-# Column new_old building
+########################################## is_new
+# Column is_new building
 data <- data %>%
-  mutate(new_old = ifelse(year_built >= 2017 & year_built <= 2021, 1, 0))
-data$new_old[is.na(data$new_old)] <- 0
-sum(is.na(data$new_old))
+  mutate(is_new = ifelse(year_built >= 2017 & year_built <= 2021, 1, 0))
+data$is_new[is.na(data$is_new)] <- 0
+sum(is.na(data$is_new))
 # Remove other old, new building columns
 data <- subset(data, select = -c(oldbuilding, newly_built))
+data$is_new <- as.factor(data$is_new)
 
-##########################################
+########################################## area, rooms, balcony
 imputarea <- mice(data[, c("area", "rooms", "balcony")], method = 'pmm', m = 5, maxit = 5)
 completed_area <- complete(imputarea)
 summary(completed_area$area)
