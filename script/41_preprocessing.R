@@ -39,15 +39,18 @@ df <- df[, !no_variability_vars]
 # Remove  variables  -----------------------------------------------------------
 # Remove ID columns 
 df <- df %>% 
-  select(-key)
+  select(-c(key))
+
+df <- df %>% 
+  select(-c('...1'))
 
 # Remove date columns
 df <- df %>% 
-  select(-date, month )
+  select(-c(date, month ))
 
 # Remove geographical columns
 df <- df %>% 
-  select(-GDENAMK, GDENR, address, lat, lon, msregion, quarter_general, quarter_specific)
+  select(-c(GDENAMK, GDENR, address, lat, lon, msregion, quarter_general, quarter_specific))
 
 # Remove description
 df <- df %>% 
