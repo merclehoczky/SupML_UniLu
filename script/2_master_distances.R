@@ -3,7 +3,7 @@
 # Add data to temporary variable --------------------------
 #data <-  training_data
 
-# Run distances scripts with Google API
+# Run distances scripts with Google API ------------------
 # Run script to set up Google API usage and functions
 source("201_distance.R")
 

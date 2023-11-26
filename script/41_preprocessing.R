@@ -65,7 +65,11 @@ str(df)
 
 # Categoricals
 df <- df %>% 
-  mutate(home_type = as.factor(home_type))
+  mutate(home_type = as.factor(home_type),
+         KTKZ = as.factor(KTKZ), 
+         #raised_groundfloor = as.factor(raised_groundfloor)
+         )
+
 
          
          
