@@ -1,7 +1,7 @@
 # Master Script
 
 # Add data to temporary variable --------------------------
-data <-  training_data
+#data <-  training_data
 
 # Run distances scripts with Google API
 # Run script to set up Google API usage and functions
