@@ -56,6 +56,10 @@ df <- df %>%
 df <- df %>% 
   select(-descr)
 
+# Remove year_built since there is is_new and avg_bauperiode
+df <- df %>% 
+  select(-year_built)
+
 # Data types ----------------------------------------------------------
 df_variable_types <- sapply(df, function(col) class(col))
 
