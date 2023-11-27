@@ -9,7 +9,7 @@ setwd(dirname(current_path ))
 print( getwd() )
 
 # Add data to temporary variable --------------------------
-#data <-  training_data
+data <-  training_data
 
 # Setup ----------------------------
 # Run script to set up functions
