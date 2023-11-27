@@ -1,5 +1,4 @@
-# Install and load necessary libraries
-install.packages("glmnet")
+#### LASSO ####
 library(glmnet)
 library(tidymodels)
 library(dplyr)
