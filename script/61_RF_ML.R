@@ -21,9 +21,9 @@ rf_model <-
 
 # Create a grid for tuning parameters ----
 rf_grid <- grid_regular(range_set(mtry(), c(2, 4)),
-                        range_set(trees(), c(50, 55)),
+                        range_set(trees(), c(50, 80)),
                         range_set(min_n(), c(1, 3)),
-                        range_set(tree_depth(), c(5, 10)))
+                        range_set(tree_depth(), c(10, 20)))
 
 
 # Train model with grid search ----
