@@ -8,7 +8,9 @@ current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path ))
 print( getwd() )
 
+
 # Add data to temporary variable -----------------------------------------
+
 data <-  training_data
 
 # Setup ------------------------------------------------------------------
