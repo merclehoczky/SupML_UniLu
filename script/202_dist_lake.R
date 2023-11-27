@@ -29,16 +29,15 @@ find_nearest <- function(lat, lon, api_key, type) {
 }
 
 
-# Loop through rows where 'dist_to_lake' is NA
 for(i in 1:nrow(data)) {
   if(is.na(data$dist_to_lake[i])) {
     origin_lat <- data$lat[i]
     origin_lng <- data$lon[i]
     
-    # Find the nearest place
+    # Find the nearest lake
     location <- find_nearest(origin_lat, origin_lng, api_key, "lake")
     
-    # Check if a school was found
+    # Check if a lake was found
     if(!is.null(location)) {
       # Format for Distance Matrix API
       origin <- paste(origin_lat, origin_lng, sep = ",")
@@ -47,13 +46,22 @@ for(i in 1:nrow(data)) {
       # Calculate distance
       distance <- calculate_distance(origin, destination, api_key)
       
-      # Update 'dist_to_school_1' in data
+      # Update 'dist_to_lake' in data if distance is not null
       if(!is.null(distance)) {
         data$dist_to_lake[i] <- distance
+      } else {
+        # Print the row index if distance calculation failed
+        print(paste("Missed distance for row:", i))
       }
+    } else {
+      # Print the row index if no nearby lake is found
+      print(paste("Missed location for row:", i))
     }
   }
+ print(i)
 }
+
+
 sum(is.na(data$dist_to_lake))
 
 
@@ -64,3 +72,4 @@ completed_lake <- complete(imputed_lake)
 summary(data$dist_to_lake)
 summary(completed_lake$dist_to_lake)
 data$dist_to_lake <- completed_lake$dist_to_lake
+
