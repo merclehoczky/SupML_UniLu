@@ -21,26 +21,28 @@ rf_workflow <-
   add_recipe(data_recipe) %>%
   add_model(rf_model)
 
-# Fit and evaluate with cross-validation ----
+# Fit the model with cross-validation using folds ----
 set.seed(42)
-
 system.time({
 rf_resamples <- 
-  rf_workflow %>% 
-  fit_resamples(resamples = train_folds) %>% 
-  collect_metrics()
+  fit_resamples(rf_workflow, resamples = train_folds)
 })
-# Print the best model ----
-show_best(x = rf_resamples, metric = "rsq")
 
-# Finalize the model workflow ----
-best_rf <- select_best(x = rf_resamples, metric = "rsq")
+# Collect metrics
+rf_metrics <- rf_resamples %>% collect_metrics()
+
+# Print the results
+print(rf_metrics)
+
+# Access the best model (if needed)
+best_rf <- select_best(rf_resamples, metric = "rsq")
 final_workflow_rf <- 
-  rf_workflow %>% 
-  finalize_workflow(best_rf)
+  finalize_workflow(rf_workflow, best_rf)
 
-# Fit the final model ----
+# Fit the final model on the entire training data (if needed)
+system.time({
 rf_fit <- fit(final_workflow_rf, data = train_data)
+})
 
 # Variable Importance -----------------------------------------------------
 vi_df <- rf_fit %>%

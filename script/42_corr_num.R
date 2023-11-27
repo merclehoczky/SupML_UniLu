@@ -19,7 +19,7 @@ df_no_na <- na.omit(df[vars_num_names])
 #            "superm_pix_count_km2", "dist_to_river")
 
 cor_matrix <- cor(df_no_na[vars_num_names], use = "complete.obs")
-corrplot(cor_matrix, method = "circle")
+#corrplot(cor_matrix, method = "circle")
 
 # Set the size of the plotting device
 png("Correlation_plot_numeric.png", width = 1600, height = 1600)

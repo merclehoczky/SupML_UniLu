@@ -23,9 +23,18 @@ na_data <- data.frame(
 # Print the table
 print(na_data)
 
-# Drop vars with NA over threshold is 80%
+# Drop vars with NA over threshold is 80%----
+# Set the threshold 
 threshold <- 0.8
-df <- df[, colMeans(is.na(df)) <= threshold]
+# Identify variables
+variables_to_remove <- colnames(df) [colMeans(is.na(df)) > threshold]
+
+# Print the names of variables to be removed
+cat( paste(variables_to_remove, collapse = ", "), "\n")
+
+# Create a new data frame without the removed variables
+df_filtered <- df[, colMeans(is.na(df)) <= threshold]
+
 
 # List all no variability variables ------------------------------------------
 no_variability_vars <- sapply(df, function(col) length(unique(col, na.rm = TRUE)) == 1)
