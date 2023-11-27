@@ -64,5 +64,5 @@ print(high_corr_vars)
 variables_to_remove <- unique(c( high_corr_vars$Variable2))
 
 # Remove the variables from the data frame
-df_filtered <- df[, !names(df) %in% variables_to_remove]
+df_corr <- df[, !names(df) %in% variables_to_remove]
 
