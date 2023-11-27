@@ -1,6 +1,6 @@
 #### Master Script for text mining from the variable "desc" ############### 
 
-# Arrange WD -------------
+# Arrange WD -----------------------------------------------------------
 library(rstudioapi)
 
 # Getting the path of your current open file
@@ -8,14 +8,16 @@ current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path ))
 print( getwd() )
 
-# Add data to temporary variable --------------------------
+
+# Add data to temporary variable -----------------------------------------
+
 data <-  training_data
 
-# Setup ----------------------------
+# Setup ------------------------------------------------------------------
 # Run script to set up functions
 source("100_textmining_setup.R")
 
-# Run text mining scripts -------------------
+# Run text mining scripts -------------------------------------------------
 # Run script that looks up parking
 source("101_parking.R")
 
@@ -71,5 +73,5 @@ source("117_playground.R")
 source("118_wheelchair.R")
 
 
-# Save dataset ------------------
+# Save dataset ------------------------------------------------------------
 write.csv(data, "../data/after_mining.csv", row.names = FALSE)

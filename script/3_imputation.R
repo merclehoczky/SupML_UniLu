@@ -24,7 +24,7 @@ summary(completed_area$area)
 data$area <- ifelse(is.na(data$area), completed_area$area, data$area)
 sum(is.na(data$area))
 #rooms
-data$area <- ifelse(is.na(data$rooms), completed_area$area, data$rooms)
+data$rooms <- ifelse(is.na(data$rooms), completed_area$rooms, data$rooms)
 sum(is.na(data$rooms))
 
 ##########################################  anteil_efh, Avg_size_household, Avg_age, Anteil_auslaend
