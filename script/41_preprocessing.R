@@ -1,5 +1,6 @@
 #### Preprocessing ###########
 df <- data
+
 # List all NA variables ------------------------------------------------------
 all_na_vars <- sapply(df, function(col) all(is.na(col)))
 all_na_var_names <- names(all_na_vars)[all_na_vars]
@@ -26,8 +27,6 @@ print(na_data)
 threshold <- 0.8
 df <- df[, colMeans(is.na(df)) <= threshold]
 
-
-
 # List all no variability variables ------------------------------------------
 no_variability_vars <- sapply(df, function(col) length(unique(col, na.rm = TRUE)) == 1)
 no_variability_var_names <- names(no_variability_vars)[no_variability_vars]
@@ -35,6 +34,8 @@ print(no_variability_var_names)
 
 # Drop no variability vars 
 df <- df[, !no_variability_vars]
+
+
 
 # Remove  variables  -----------------------------------------------------------
 # Remove ID columns 
@@ -67,14 +68,24 @@ print(df_variable_types)
 str(df)
 # Sort out 
 
-# Categoricals
+# Categoricals ----------------------
+# List columns
+cols_to_factorize <- c("home_type", "KTKZ", "raised_groundfloor")
+
+# Apply as.factor to the selected columns
 df <- df %>% 
-  mutate(home_type = as.factor(home_type),
-         KTKZ = as.factor(KTKZ), 
-         #raised_groundfloor = as.factor(raised_groundfloor)
-         )
+  mutate(across(
+    .cols = all_of(cols_to_factorize),
+    .fns = as.factor
+  ))
 
+# Factorize vars again ----------------------
+cols_to_factor <-  c("parking", "basement", "dishwasher", "dryer", 
+                     "laundry", "oven", "elevator", "furnished", "pets", "pool", "shared_flat", 
+                     "kids_friendly", "cabletv", "cheminee", "playground", "wheelchair", "is_new")
 
-         
-         
-         
+df <- df %>% 
+  mutate(across(
+    .cols = any_of(cols_to_factor),
+    .fns = as.factor
+  ))
