@@ -44,3 +44,22 @@ test_predictions <- predict(lm_model, newdata = bake(data_fin_recipe, new_data =
 # Evaluate the model on the test set
 test_rmse <- sqrt(mean((test_predictions - test_data_fin$rent_full)^2))
 cat("Test RMSE:", test_rmse, "\n")
+
+# Get the summary of variable selection
+variable_selection_summary <- summary(cv_results$finalModel)
+
+# Print the summary
+print(variable_selection_summary)
+
+
+### try this
+library(MASS)
+# Create a linear regression model
+lm_model <- lm(rent_full ~ ., data = bake(data_fin_recipe, new_data = train_data_fin))
+
+# Apply backward selection using stepAIC
+backward_model <- stepAIC(lm_model, direction = "backward")
+
+# Print the summary of variable selection
+summary(backward_model)
+
