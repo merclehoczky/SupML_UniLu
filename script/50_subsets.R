@@ -12,3 +12,7 @@ df_wo_svars <- df %>%
 df_wo_mrs <- df %>% 
   select(- c(Micro_rating_NoiseAndEmission, Micro_rating_Accessibility, Micro_rating_DistrictAndArea,
          Micro_rating_SunAndView, Micro_rating_ServicesAndNature))
+
+
+df_wo_mrs_others <- df %>% 
+  select(-c(cabletv, dryer, oven ))
