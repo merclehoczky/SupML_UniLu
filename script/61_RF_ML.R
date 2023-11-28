@@ -1,5 +1,7 @@
 library(parallel) # install.packages("parallel")
 library(doParallel) # install.packages("doParallel")
+library(tidyverse)
+library(tidymodels)
 
 # Start Parallelisation with n-1 cores -----------------------------------
 
@@ -32,20 +34,25 @@ system.time({
 rf_workflow <- 
   workflow() %>%
   add_recipe(data_recipe) %>%
-  add_model(rf_model) %>%
-  tune_grid(resamples = train_folds, grid = rf_grid)
+  add_model(rf_model)
 })
 
 
 # Evaluate resamples ----
 system.time({
   set.seed(42)
-rf_resamples <- 
-  rf_workflow %>% 
-  fit_resamples(resamples = train_folds) %>% 
-  collect_metrics()
+  rf_resamples <- 
+    rf_workflow %>% 
+    fit_resamples(resamples = train_folds) %>% 
+    collect_metrics()
 })
 
+system.time({
+  rf_results <- 
+    rf_workflow %>% 
+    tune_grid(resamples = train_folds, grid = rf_grid) %>% 
+    collect_metrics()
+})
 
 autoplot(rf_resamples)
 
@@ -53,7 +60,7 @@ show_best(x = rf_resamples, metric = "rsq")
 
 # Finalise model workflow -------------------------------------------------
 
-best_rf <- select_best(x = rf_res, metric = "rsq")
+best_rf <- select_best(x = rf_results, metric = "rsq")
 
 system.time({
   set.seed(42)
@@ -67,10 +74,11 @@ final_workflow_rf <-
 rf_fit <- fit(final_workflow, train_data)
 
 # Variable Importance -----------------------------------------------------
+library(vip)
 
 vi_df <-  rf_fit %>% 
   extract_fit_parsnip() %>% # extract the fit object 
-  vi(scale = TRUE) #scale the variable importance scores so that the largest is 100
+  vi(scale= TRUE) #scale the variable importance scores so that the largest is 100
 
 ggplot(vi_df, aes(x = reorder(Variable, Importance), y = Importance)) +
   geom_col(fill = "#0072B2") +
