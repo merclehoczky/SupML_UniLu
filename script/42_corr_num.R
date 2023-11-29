@@ -44,7 +44,7 @@ dev.off()
 
 # List and remove correlations above abs(0.95) -------
 # Set a threshold for correlation
-threshold <- abs(0.95)
+threshold <- abs(0.80)
 
 # Set diagonal elements to 0
 diag(cor_matrix) <- 0
