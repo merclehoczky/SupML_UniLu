@@ -16,3 +16,10 @@ df_wo_mrs <- df_corr %>%
 
 df_wo_mrs_others <- df_wo_mrs %>% 
   select(-c(cabletv, dryer, oven ))
+
+df_wo_variability <- df_corr %>% 
+  select(-c(dryer, elevator, cabletv, minergie, playground, shared_flat, wheelchair, 
+            oven, dist_to_haltst,  dist_to_highway,dist_to_lake,dist_to_main_stat, anteil_efh, 
+            Anteil_auslaend,dishwasher,apoth_pix_count_km2 , pool, raised_groundfloor ,avg_bauperiode,wgh_avg_sonnenklasse_per_egid, 
+            dist_to_school_1, dist_to_train_stat, dist_to_river ,Micro_rating, Avg_size_household))
+
