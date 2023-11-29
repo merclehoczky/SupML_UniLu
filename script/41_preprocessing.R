@@ -1,4 +1,6 @@
 #### Preprocessing ###########
+library(dplyr)
+
 df <- data
 
 # List all NA variables ------------------------------------------------------
