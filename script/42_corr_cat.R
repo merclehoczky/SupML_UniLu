@@ -26,7 +26,7 @@ for (i in 1:(length(factorial_columns) - 1)) {
     result <- chisq.test(contingency_table, correct = FALSE)
     
     # Store results in the data frame
-    results_df <- rbind(results_df, list(
+    cat_corr_results_df <- rbind(results_df, list(
       Variable1 = factorial_columns[i],
       Variable2 = factorial_columns[j],
       P_Value = result$p.value,
@@ -38,4 +38,4 @@ for (i in 1:(length(factorial_columns) - 1)) {
 
 
 # View the results data frame
-print(results_df)
+print(cat_corr_results_df)
