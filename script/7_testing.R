@@ -26,24 +26,12 @@ na_data <- data.frame(
 print(na_data)
 
 # Drop vars with NA over threshold is 80%----
-# Set the threshold 
-threshold <- 0.8
-# Identify variables
-variables_to_remove <- colnames(test_data_new) [colMeans(is.na(test_data_new)) > threshold]
-
-# Print the names of variables to be removed
-cat( paste(variables_to_remove, collapse = ", "), "\n")
-
-# Create a new data frame without the removed variables
-test_data_new <- test_data_new[, colMeans(is.na(test_data_new)) <= threshold]
+test_data_new <- test_data_new[, !names(test_data_new) %in% variables_to_remove_NA_threshold]
 
 
-# List all no variability variables ------------------------------------------
-no_variability_vars <- sapply(test_data_new, function(col) length(unique(col, na.rm = TRUE)) == 1)
-no_variability_var_names <- names(no_variability_vars)[no_variability_vars]
-print(no_variability_var_names)
 
-# Drop no variability vars 
+
+# Drop no variability vars ------------------------------------------
 test_data_new <- test_data_new[, !no_variability_vars]
 
 
@@ -103,7 +91,7 @@ test_data_new <- test_data_new %>%
 
 
 #### Remove correlating vars ------------------------------------------------------------------------------------------------
-test_data_new <- test_data_new[, !names(test_data_new) %in% variables_to_remove]
+test_data_new <- test_data_new[, !names(test_data_new) %in% variables_to_remove_corr_num]
 
 
 ##### Subset the correct one --------------------------------------------------------------
