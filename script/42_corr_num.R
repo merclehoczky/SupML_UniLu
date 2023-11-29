@@ -61,8 +61,8 @@ high_corr_vars <- data.frame(Variable1 = rownames(cor_matrix)[high_corr_pairs[, 
 print(high_corr_vars)
 
 # Remove one variable from each pair
-variables_to_remove <- unique(c( high_corr_vars$Variable2))
+variables_to_remove_corr_num <- unique(c( high_corr_vars$Variable2))
 
 # Remove the variables from the data frame
-df_corr <- df[, !names(df) %in% variables_to_remove]
+df_corr <- df[, !names(df) %in% variables_to_remove_corr_num]
 

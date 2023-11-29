@@ -2,6 +2,7 @@
 library(dplyr)
 
 df <- data
+df <- test_after_all
 
 # List all NA variables ------------------------------------------------------
 all_na_vars <- sapply(df, function(col) all(is.na(col)))
@@ -29,10 +30,10 @@ print(na_data)
 # Set the threshold 
 threshold <- 0.8
 # Identify variables
-variables_to_remove <- colnames(df) [colMeans(is.na(df)) > threshold]
+variables_to_remove_NA_threshold <- colnames(df) [colMeans(is.na(df)) > threshold]
 
 # Print the names of variables to be removed
-cat( paste(variables_to_remove, collapse = ", "), "\n")
+cat( paste(variables_to_remove_NA_threshold, collapse = ", "), "\n")
 
 # Create a new data frame without the removed variables
 df <- df[, colMeans(is.na(df)) <= threshold]
@@ -100,3 +101,4 @@ df <- df %>%
     .cols = any_of(cols_to_factor),
     .fns = as.factor
   ))
+
