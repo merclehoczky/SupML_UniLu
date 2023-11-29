@@ -73,8 +73,6 @@ metrics_result <- multi_metric(predictions, truth = rent_full, estimate = rf_pre
 # Print the metrics ----
 print(metrics_result)
 
-# Confusion matrix ------------------------------------------------------
-# Note: For regression problems, confusion matrix is not applicable
 
 # End Parallelisation -----------------------------------------------------
 parallel::stopCluster(cl)
