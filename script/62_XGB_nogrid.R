@@ -5,7 +5,7 @@ cl <- parallel::makePSOCKcluster(num_cores)
 doParallel::registerDoParallel(cl)
 showConnections()
 
-
+library(caret)
 
 # Define model ----
 xgb_model <- 
@@ -81,18 +81,11 @@ xgb_pred <- predict(xgb_fit, new_data = test_data)
 # print(metrics_result_xgb)
 
 # Calculate performance metrics ----
-rmse_result_xgb <- rmse(predictions_xgb, truth = rent_full, estimate = xgb_pred)
-mae_result_xgb <- mae(predictions_xgb, truth = rent_full, estimate = xgb_pred)
-mape_result_xgb <- mape(predictions_xgb, truth = rent_full, estimate = xgb_pred)
-rsq_result_xgb <- rsq(predictions_xgb, truth = rent_full, estimate = xgb_pred)
-huber_loss_result_xgb <- yardstick::huber_loss(predictions_xgb, truth = rent_full, estimate = xgb_pred)
+rmse_result_xgb <- RMSE(xgb_pred$.pred, test_data$rent_full)
 
 # Print the metrics ----
 print(rmse_result_xgb)
-print(mae_result_xgb)
-print(mape_result_xgb)
-print(rsq_result_xgb)
-print(huber_loss_result_xgb)
+
 
 # End Parallelisation -----------------------------------------------------
 parallel::stopCluster(cl)
