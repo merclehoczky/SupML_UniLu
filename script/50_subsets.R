@@ -10,7 +10,7 @@ df_wo_svars <- df_corr %>%
 # without all micro_rating except main one
 
 df_wo_mrs <- df_corr %>% 
-  select(- c(Micro_rating_NoiseAndEmission, Micro_rating_Accessibility, Micro_rating_DistrictAndArea,
+  select(- c( Micro_rating_Accessibility, Micro_rating_DistrictAndArea,
          Micro_rating_SunAndView, Micro_rating_ServicesAndNature))
 
 
