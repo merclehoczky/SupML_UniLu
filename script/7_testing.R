@@ -4,12 +4,9 @@
 test_data_new <- test_after_all
 
 # List all NA variables ------------------------------------------------------
-all_na_vars <- sapply(test_data_new, function(col) all(is.na(col)))
-all_na_var_names <- names(all_na_vars)[all_na_vars]
-print(all_na_var_names)
 
 # Drop all NA variables and create new variable test_data_new
-test_data_new <- test_data_new[, !all_na_vars]
+test_data_new <- test_data_new[, !names(test_data_new) %in% all_na_var_names]
 
 
 # List vars with NA ------------------------
@@ -29,11 +26,9 @@ print(na_data)
 test_data_new <- test_data_new[, !names(test_data_new) %in% variables_to_remove_NA_threshold]
 
 
-
-
 # Drop no variability vars ------------------------------------------
-test_data_new <- test_data_new[, !no_variability_vars]
 
+test_data_new <- test_data_new[, !names(test_data_new) %in% no_variability_vars]
 
 
 # Remove  variables  -----------------------------------------------------------
@@ -102,6 +97,32 @@ test_data_new <- test_data_new %>%
 ####---------------------------------------------------------------------------------------------
 # Apply the same preprocessing steps to the test data---------------------
 test_data_preprocessed <- bake(data_recipe, new_data = test_data_new)
+
+
+# Make predictions on the test set
+xgb_pred_test <- predict(xgb_fit, new_data = test_data_preprocessed)
+
+# If 'rent_full' is not present in the test_data, you can add the predictions to it
+test_data_with_predictions <- bind_cols(test_data, .pred = xgb_pred_test$.pred)
+
+# Now you can see the predicted values in the 'test_data_with_predictions' dataframe
+# The predicted values are stored in the '.pred' column
+
+
+
+#####
+# Make sure the features in the training and testing datasets match
+# If some columns are missing, add them or remove unnecessary columns
+
+# Assuming 'rent_full' is the response variable in your model
+# If not, replace 'rent_full' with the correct response variable
+
+# Check and add missing columns to test_data_new
+missing_columns <- setdiff(names(test_data_preprocessed), names(test_data))
+test_data <- bind_cols(test_data, !!missing_columns := NA)
+
+# Apply the same preprocessing steps to the test data
+test_data_preprocessed <- bake(data_recipe, new_data = test_data)
 
 # Make predictions on the test set
 xgb_pred_test <- predict(xgb_fit, new_data = test_data_preprocessed)
