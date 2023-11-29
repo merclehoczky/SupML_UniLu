@@ -33,7 +33,7 @@ variables_to_remove <- colnames(df) [colMeans(is.na(df)) > threshold]
 cat( paste(variables_to_remove, collapse = ", "), "\n")
 
 # Create a new data frame without the removed variables
-df_filtered <- df[, colMeans(is.na(df)) <= threshold]
+df <- df[, colMeans(is.na(df)) <= threshold]
 
 
 # List all no variability variables ------------------------------------------
