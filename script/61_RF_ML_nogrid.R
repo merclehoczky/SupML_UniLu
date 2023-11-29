@@ -5,8 +5,7 @@ cl <- parallel::makePSOCKcluster(num_cores)
 doParallel::registerDoParallel(cl)
 showConnections()
 
-# Load Data --------------------------------------------------------------
-# Assume data_recipe, train_data, test_data, and train_folds are already defined
+library(vip)
 
 # Define model ----
 rf_model <- 
