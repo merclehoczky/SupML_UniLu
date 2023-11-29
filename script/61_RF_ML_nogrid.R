@@ -35,7 +35,7 @@ rf_metrics <- rf_resamples %>% collect_metrics()
 print(rf_metrics)
 
 # Access the best model (if needed)
-best_rf <- select_best(rf_resamples, metric = "rsq")
+best_rf <- select_best(rf_resamples, metric = "rmse")
 final_workflow_rf <- 
   finalize_workflow(rf_workflow, best_rf)
 
