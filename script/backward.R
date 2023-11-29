@@ -52,14 +52,25 @@ variable_selection_summary <- summary(cv_results$finalModel)
 print(variable_selection_summary)
 
 
-### try this
+### Backwards
 library(MASS)
-# Create a linear regression model
-lm_model <- lm(rent_full ~ ., data = bake(data_fin_recipe, new_data = train_data_fin))
 
-# Apply backward selection using stepAIC
-backward_model <- stepAIC(lm_model, direction = "backward")
+#########
+# Full model for backward selection on training data
+full_model_train <- lm(rent_full ~ ., data = train_data)
 
-# Print the summary of variable selection
-summary(backward_model)
+# Backward selection
+backward_model_train <- stepAIC(full_model_train, direction = "backward")
+
+# Minimal model for forward selection on training data
+minimal_model_train <- lm(rent_full ~ 1, data = train_data)
+
+# Forward selection
+forward_model_train <- stepAIC(minimal_model_train, scope = list(lower = minimal_model_train, upper = full_model_train), direction = "forward")
+
+# Evaluate backward selection model
+summary(backward_model_train)
+
+# Evaluate forward selection model
+summary(forward_model_train)
 
