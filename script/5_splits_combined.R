@@ -1,5 +1,12 @@
-# Assuming 'rent_full' is the response variable in your model
-# If not, replace 'rent_full' with the correct response variable
+library(caret)
+library(tidymodels)
+library(randomForest)
+library(xgboost)
+library(e1071)
+library(gbm)
+
+set.seed(42)
+
 data_fin <- df_wo_mrs 
 # Combine the training and testing datasets
 combined_data <- bind_rows(
@@ -16,13 +23,14 @@ combined_recipe <- recipe(rent_full ~ ., data = combined_data) %>%
   step_scale(all_numeric(), -all_outcomes()) %>% 
   prep()
 
+data_recipe <- combined_recipe
 # Apply the same preprocessing steps to the combined data
 combined_data_preprocessed <- bake(combined_recipe, new_data = combined_data)
 
 
 # Filter the data based on split_test and split_train
 test_data_preprocessed <- combined_data_preprocessed %>%
-  filter(split_test == 1) %>%
+  filter(split_test  1) %>%
   select(-split_test, -split_train)
 
 train_data_preprocessed <- combined_data_preprocessed %>%
