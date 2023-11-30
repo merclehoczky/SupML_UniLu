@@ -21,8 +21,6 @@ df_split <- initial_split(data_fin, prop = 0.8)
 train_data <- training(df_split)
 test_data <- testing(df_split)
 
-# Define cross-validation with 4 folds
-train_folds <- vfold_cv(data = data_fin, v = 4)
 
 # Create a recipe for data preprocessing with normalization and scaling
 
@@ -31,7 +29,15 @@ data_recipe <- recipe(rent_full ~ ., data = train_data) %>%
   step_zv(all_predictors()) %>%
   step_normalize(all_numeric(), -all_outcomes()) %>%
   step_scale(all_numeric(), -all_outcomes()) %>% 
-  step_dummy(all_nominal(), one_hot = TRUE) %>%  
+  step_dummy(all_nominal()) %>%  
   prep()
   
 
+# Apply the same preprocessing steps to the training data
+#train_data_preprocessed <- bake(data_recipe, new_data = train_data)
+
+# Define cross-validation with 4 folds
+#train_folds <- vfold_cv(data = train_data_preprocessed, v = 4)
+
+# Define cross-validation with 4 folds
+train_folds <- vfold_cv(data = train_data, v = 5)

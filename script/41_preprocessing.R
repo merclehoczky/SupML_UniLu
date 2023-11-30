@@ -2,7 +2,7 @@
 library(dplyr)
 
 df <- data
-df <- test_after_all
+#df <- test_after_all
 
 # List all NA variables ------------------------------------------------------
 all_na_vars <- sapply(df, function(col) all(is.na(col)))
