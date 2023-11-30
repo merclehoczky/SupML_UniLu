@@ -15,6 +15,8 @@ data_fin <- df_corr
 data_fin <- df_wo_mrs  #using this
 #data_fin <- df_wo_mrs_others
 #data_fin <- df_wo_variability
+#data_fin <- df_new
+
 # Create a 80-20 train-test split
 
 df_split <- initial_split(data_fin, prop = 0.8)
