@@ -92,7 +92,7 @@ df <- df %>%
   ))
 
 # Factorize vars again ----------------------
-cols_to_factor <-  c("parking", "basement", "dishwasher", "dryer", 
+cols_to_factor <-  c("parking", "balcony", "basement", "dishwasher", "dryer", "minergie", 
                      "laundry", "oven", "elevator", "furnished", "pets", "pool", "shared_flat", 
                      "kids_friendly", "cabletv", "cheminee", "playground", "wheelchair", "is_new")
 
