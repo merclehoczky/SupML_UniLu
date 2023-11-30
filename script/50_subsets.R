@@ -23,3 +23,10 @@ df_wo_variability <- df_corr %>%
             Anteil_auslaend,dishwasher,apoth_pix_count_km2 , pool, raised_groundfloor ,avg_bauperiode,wgh_avg_sonnenklasse_per_egid, 
             dist_to_school_1, dist_to_train_stat, dist_to_river ,Micro_rating, Avg_size_household))
 
+# subset 3 ---------
+df_new <- subset(df_corr, select = -c(dryer, elevator, cabletv, minergie, playground, shared_flat, wheelchair, 
+                                         oven, dist_to_haltst,  dist_to_highway,dist_to_lake,dist_to_main_stat, anteil_efh, 
+                                         KTKZ,furnished,Micro_rating_NoiseAndEmission ,Anteil_auslaend,dishwasher,apoth_pix_count_km2 , pool, raised_groundfloor ,avg_bauperiode,wgh_avg_sonnenklasse_per_egid, 
+                                         dist_to_school_1, dist_to_train_stat, dist_to_river ,Micro_rating, Avg_size_household))
+data_new$msregion <- training_data$msregion
+data_new$msregion <- as.factor(data_new$msregion)
