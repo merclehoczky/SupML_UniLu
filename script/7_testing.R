@@ -1,5 +1,4 @@
-# Assuming 'rent_full' is the response variable in your model
-# If not, replace 'rent_full' with the correct response variable
+
 
 test_data_new <- test_after_all
 
@@ -99,42 +98,24 @@ test_data_new <- test_data_new %>%
 
 
 # Apply the same preprocessing steps to the test data---------------------
-test_data_new_preprocessed <- bake(data_recipe, new_data = test_data_new)
+#test_data_new_preprocessed <- bake(data_recipe, new_data = test_data_new)
 
 
 # Make predictions on the test set
-xgb_pred_test <- predict(xgb_fit, new_data = test_data_new_preprocessed)
+xgb_pred_test <- predict(xgb_fit, new_data = test_data_new)
 
-# If 'rent_full' is not present in the test_data, you can add the predictions to it
-test_data_with_predictions <- bind_cols(test_data, .pred = xgb_pred_test$.pred)
+summary(xgb_pred_test)
 
-# Now you can see the predicted values in the 'test_data_with_predictions' dataframe
-# The predicted values are stored in the '.pred' column
+#Create result table
+test_data_with_predictions <- bind_cols(test_after_all$key, .pred = xgb_pred_test$.pred)
 
+# Assuming 'key' is the key column in test_data
+test_data_with_predictions <- bind_cols(
+  key = test_after_all$key,
+  rent = xgb_pred_test$.pred
+)
 
+# Save result file
 
-##### Option 2-----------------------
-# Make sure the features in the training and testing datasets match
-# If some columns are missing, add them or remove unnecessary columns
+write.csv(test_data_with_predictions, file = '../result/initial_predictions_LehTan.csv', row.names = FALSE)
 
-# Assuming 'rent_full' is the response variable in your model
-# If not, replace 'rent_full' with the correct response variable
-
-# Check and add missing columns to test_data_new
-missing_columns <- setdiff(names(test_data_preprocessed), names(test_data))
-test_data <- bind_cols(test_data, !!missing_columns := NA)
-
-# Apply the same preprocessing steps to the test data
-test_data_preprocessed <- bake(data_recipe, new_data = test_data)
-
-# Make predictions on the test set
-xgb_pred_test <- predict(xgb_fit, new_data = test_data_preprocessed)
-
-# If 'rent_full' is not present in the test_data, you can add the predictions to it
-test_data_with_predictions <- bind_cols(test_data, .pred = xgb_pred_test$.pred)
-
-# Now you can see the predicted values in the 'test_data_with_predictions' dataframe
-# The predicted values are stored in the '.pred' column
-
-
-################ Option 3 --------------------
