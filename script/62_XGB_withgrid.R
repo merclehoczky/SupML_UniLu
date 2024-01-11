@@ -4,6 +4,7 @@ library(tidyverse)
 library(tidymodels)
 library(parsnip)
 library(vip)
+library(caret)
 # Start Parallelisation with n-1 cores -----------------------------------
 
 cores <- parallel::detectCores(logical = FALSE) # Check how many cores you have available
@@ -16,26 +17,30 @@ showConnections() # Shows the connections currently active (should match core nu
 # Load Data --------------------------------------------------------------
 
 # Define model ----
-rf_model <- 
-  rand_forest() %>% # Model type: Random Forest  
-  set_engine("randomForest") %>%  # Computational engine: randomForest
-  set_mode("regression") %>% 
-  set_args(mtry = tune(), trees = tune(), min_n = tune(), tree_depth = tune())
+xgb_model <- 
+    boost_tree(
+      trees = tune(),
+      tree_depth = tune(),  
+      min_n = tune(),       
+      learn_rate = 0.5, 
+      loss_reduction = 0.2  
+    ) %>% 
+      set_engine("xgboost") %>% 
+      set_mode("regression")
 
 # Create a grid for tuning parameters ----
-rf_grid <- grid_regular(range_set(mtry(), c(2, 4)),
-                        range_set(trees(), c(50, 60)),
-                        range_set(min_n(), c(2, 3)),
-                        range_set(tree_depth(), c(10, 20)))
+xgb_grid <- grid_regular(range_set(trees(), c(30, 100)),
+                        range_set(min_n(), c(1, 5)),
+                        range_set(tree_depth(), c(10, 30)))
 
 
 # Train model with grid search ----
 system.time({
   set.seed(42)
-  rf_workflow <- 
+  xgb_workflow <- 
     workflow() %>%
     add_recipe(data_recipe) %>%
-    add_model(rf_model) 
+    add_model(xgb_model) 
 })
 
 
@@ -44,39 +49,39 @@ system.time({
 
 system.time({
   set.seed(42)
-  rf_resamples <- 
-    rf_workflow %>% 
-    tune_grid(resamples = train_folds, grid = rf_grid)
-   
+  xgb_resamples <- 
+    xgb_workflow %>% 
+    tune_grid(resamples = train_folds, grid = xgb_grid)
+  
 })
 
 system.time({
-  rf_results <- 
-    rf_workflow }) #%>% 
-    #collect_metrics()
+  xgb_results <- 
+    xgb_workflow }) #%>% 
+#collect_metrics()
 
-rf_resamples %>%
-   collect_metrics()
+xgb_resamples %>%
+  collect_metrics()
 
 
-#autoplot(rf_resamples)
+#autoplot(xgb_resamples)
 
-show_best(x = rf_resamples, metric = "rmse")
+show_best(x = xgb_resamples, metric = "rmse")
 
 # Finalise model workflow -------------------------------------------------
-#best_rf <- select_best(x = rf_results, metric = "mse")
+#best_xgb <- select_best(x = xgb_results, metric = "mse")
 # Identify the best model based on MSE ----
-best_rf <- rf_resamples$.metrics[[1]] %>%
+best_xgb <- xgb_resamples$.metrics[[1]] %>%
   filter(.metric == "rmse") %>%
   filter(.estimate == min(.estimate)) %>%
-  select(mtry, trees, min_n, tree_depth)
+  select(trees, min_n, tree_depth)
 
 
 
 # Extract the best tuning parameters ----
-best_params <- best_rf %>%
+best_params <- best_xgb %>%
   slice_min(order_by = "mean", n = 1) %>%
-  select(mtry, trees, min_n, tree_depth)
+  select(trees, min_n, tree_depth)
 
 # Print or use the best_params as needed
 print(best_params)
@@ -84,17 +89,17 @@ print(best_params)
 
 system.time({
   set.seed(42)
-  final_workflow_rf <- finalize_workflow(rf_workflow, best_rf)
+  final_workflow_xgb <- finalize_workflow(xgb_workflow, best_xgb)
 })
 
 # Fit ---------------------------------------------------------
 
-rf_fit <- fit(final_workflow_rf, train_data)
+xgb_fit <- fit(final_workflow_xgb, train_data)
 
 # Variable Importance -----------------------------------------------------
 library(vip)
 
-vi_df <-  rf_fit %>% 
+vi_df <-  xgb_fit %>% 
   extract_fit_parsnip() %>% # extract the fit object 
   vi(scale= TRUE) #scale the variable importance scores so that the largest is 100
 
@@ -108,28 +113,28 @@ ggplot(vi_df, aes(x = reorder(Variable, Importance), y = Importance)) +
 
 # Predict ------------------------------------------------
 
-rf_pred <- predict(rf_fit, new_data = test_data)
+xgb_pred <- predict(xgb_fit, new_data = test_data)
 
 predictions <- test_data %>% 
   select(rent_full) %>% #
-  mutate(rf_pred = round(rf_pred$.pred, 0))
+  mutate(xgb_pred = round(xgb_pred$.pred, 0))
 
-# Calculate performance metrics -------------------------------------------
+# Calculate pexgbormance metrics -------------------------------------------
 predictions <- test_data %>%
   select(rent_full) %>%
-  bind_cols(.pred = rf_pred$.pred) %>%
-  mutate(rf_pred = round(.pred, 0))
+  bind_cols(.pred = xgb_pred$.pred) %>%
+  mutate(xgb_pred = round(.pred, 0))
 
 
 # Specify set of metrics to evaluate
 
-# Calculate performance metrics -------------------------------------------
-metrics(predictions, truth = rent_full, estimate = rf_pred)
+# Calculate pexgbormance metrics -------------------------------------------
+metrics(predictions, truth = rent_full, estimate = xgb_pred)
 
 # Specify set of metrics to evaluate
 multi_metric <- metric_set(rmse, mae, mape, rsq, huber_loss)
 
-multi_metric(predictions, truth = rent_full, estimate = rf_pred)
+multi_metric(predictions, truth = rent_full, estimate = xgb_pred)
 
 
 
