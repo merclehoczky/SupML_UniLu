@@ -102,11 +102,10 @@ IQR <- Q3 - Q1
 lower_bound <- Q1 - 1.5 * IQR
 upper_bound <- Q3 + 1.5 * IQR
 
-# Identifying outliers
-outliers <- final$rent_full[final$rent_full < lower_bound | final$rent_full > upper_bound]
+final <- final %>% filter(rent_full > lower_bound, final$rent_full < upper_bound) #54328
 
-final <- final[-outliers, ] #56287
-
+#final <- final[-outliers, ] #56287
+summary(final$rent_full)
 # Remove to old buildings
 final <- final %>% 
 filter(year_built > 1800 | is.na(year_built)) #56053
@@ -301,7 +300,7 @@ print(high_corr_vars)
 ############## LASSO ----
 
 # Convert factors to dummy variables
-data_numeric <- data.frame(model.matrix(~ . - 1, data = final))
+data_numeric <- data.frame(model.matrix(~ . - 1, data = data_fin))
 
 # Separate the response variable and predictors
 response_variable <- data_numeric$rent_full
