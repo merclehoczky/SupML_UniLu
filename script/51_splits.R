@@ -29,17 +29,25 @@ test_data <- testing(df_split)
 data_recipe <- recipe(rent_full ~ ., data = train_data) %>%
   step_naomit(all_predictors()) %>% 
   step_zv(all_predictors()) %>%
-  step_normalize(all_numeric(), -all_outcomes()) %>%
   step_scale(all_numeric(), -all_outcomes()) %>% 
-  step_dummy(all_nominal()) %>%  
-  prep()
+  step_dummy(all_nominal()) %>% 
+  step_rm(starts_with('..')) %>% 
+  prep()  
+  
   
 
-# Apply the same preprocessing steps to the training data
-#train_data_preprocessed <- bake(data_recipe, new_data = train_data)
 
-# Define cross-validation with 4 folds
-#train_folds <- vfold_cv(data = train_data_preprocessed, v = 4)
+# Apply the preprocessing steps to the  data
+train_data <- bake(data_recipe, new_data = train_data)
+test_data<- bake(data_recipe, new_data = test_data)
+
+# Removing columns starting with '..' 
+train_data <- train_data %>%
+  select(-starts_with('..'))
+
+test_data <- test_data %>%
+  select(-starts_with('..'))
+
 
 # Define cross-validation with 4 folds
 train_folds <- vfold_cv(data = train_data, v = 5)
