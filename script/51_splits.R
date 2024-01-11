@@ -7,12 +7,13 @@ library(randomForest)
 library(xgboost)
 library(e1071)
 library(gbm)
-
+library(rsample)
 set.seed(42)
 
-data_fin <- df_corr
+data_fin <- df
+#data_fin <- df_corr
 #data_fin <- df_wo_svars
-data_fin <- df_wo_mrs  #using this
+#data_fin <- df_wo_mrs  #using this
 #data_fin <- df_wo_mrs_others
 #data_fin <- df_wo_variability
 #data_fin <- df_new
@@ -38,14 +39,14 @@ data_recipe <- recipe(rent_full ~ ., data = train_data) %>%
 
 
 # Apply the preprocessing steps to the  data
-train_data <- bake(data_recipe, new_data = train_data)
-test_data<- bake(data_recipe, new_data = test_data)
+train_data_baked <- bake(data_recipe, new_data = train_data)
+test_data_baked <- bake(data_recipe, new_data = test_data)
 
 # Removing columns starting with '..' 
-train_data <- train_data %>%
+train_data_baked <- train_data_baked %>%
   select(-starts_with('..'))
 
-test_data <- test_data %>%
+test_data_baked <- test_data_baked %>%
   select(-starts_with('..'))
 
 
