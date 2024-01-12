@@ -205,7 +205,7 @@ df <- df[, !no_variability_vars]
 sapply(df, is.numeric)
 sapply(df, is.factor)
 
-df[, c("KTKZ", "home_type")] <- lapply(df[, c("KTKZ", "home_type")], as.factor)
+df[, c("msregion", "home_type")] <- lapply(df[, c("msregion", "home_type")], as.factor)
 
 for (i in colnames(df)) {
   unique_values <- unique(df[[i]])
@@ -249,7 +249,7 @@ df <- df %>%
 
 # Remove geographical columns
 df <- df %>% 
-  select(-c(GDENAMK, GDENR, address, lat, lon, msregion, quarter_general, quarter_specific))
+  select(-c(GDENAMK, GDENR, address, lat, lon, KTKZ, quarter_general, quarter_specific))
 
 # Remove description
 df <- df %>% 
@@ -268,7 +268,7 @@ str(df)
 
 # Categoricals ----------------------
 # List columns
-cols_to_factorize <- c("home_type", "KTKZ")#, #"raised_groundfloor")
+cols_to_factorize <- c("home_type", "msregion")#, #"raised_groundfloor")
 
 # Apply as.factor to the selected columns
 df <- df %>% 
