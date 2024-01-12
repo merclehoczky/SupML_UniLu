@@ -10,7 +10,7 @@ print( getwd() )
 
 # Upload data
 path_train <- "../data/after_google.csv"
-path_test <- "../data/test_after_all.csv"
+path_test <- "../data/test_after_gapi_text.csv"
 training_data <- read_csv(path_train)
 x_test <- read_csv(path_test)
 
@@ -31,7 +31,7 @@ library(xgboost)
 # Add data to temporary variable -----------------------------------------
 
 data <-  training_data
-
+#data <- x_test
 
 final <- data
 # Remove unusual, outliers-----------------------------------------------------
@@ -207,6 +207,8 @@ sapply(df, is.factor)
 
 df[, c("msregion", "home_type")] <- lapply(df[, c("msregion", "home_type")], as.factor)
 
+variables_to_remove_undersix <- c()
+
 for (i in colnames(df)) {
   unique_values <- unique(df[[i]])
   variety <- length(unique(df[[i]]))
@@ -226,6 +228,7 @@ for (i in colnames(df)) {
     
     
     if (percent_valA < 6 | percent_valB < 6) {
+      variables_to_remove_undersix <- c(variables_to_remove_undersix, i)
       df[[i]] <- NULL
       print(df[[i]])
     } else {
@@ -241,7 +244,7 @@ df <- df %>%
   select(-c(key))
 
 df <- df %>% 
-  select(-c('...1', '...2', '...3'))
+  select(-starts_with('..'))
 
 # Remove date columns
 df <- df %>% 
