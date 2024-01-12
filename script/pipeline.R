@@ -241,7 +241,7 @@ df <- df %>%
   select(-c(key))
 
 df <- df %>% 
-  select(-c('...1', '...2', '...2'))
+  select(-c('...1', '...2', '...3'))
 
 # Remove date columns
 df <- df %>% 
