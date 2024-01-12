@@ -3,16 +3,6 @@
 test_data_new <- x_test #18001
 
 
-# Remove unusual, outliers-----------------------------------------------------
-
-test_data_new <- test_data_new %>% 
-  filter(area > 20, area < 381) # 56801
-
-# Remove to old buildings
-test_data_new <- test_data_new %>% 
-  filter(year_built > 1800 | is.na(year_built)) #56053
-
-
 #################### Imputation ----------------------------------------------------
 
 ################## is_new
