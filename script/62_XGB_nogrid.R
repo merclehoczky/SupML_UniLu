@@ -1,3 +1,11 @@
+library(parallel) # install.packages("parallel")
+library(doParallel) # install.packages("doParallel")
+library(tidyverse)
+library(tidymodels)
+library(parsnip)
+library(vip)
+library(caret)
+
 # Start Parallelisation with n-1 cores -----------------------------------
 cores <- parallel::detectCores(logical = FALSE)
 num_cores <- max(1, cores - 1)
@@ -11,7 +19,7 @@ library(caret)
 # Define model ----
 xgb_model <- 
   boost_tree(
-    trees = 100,
+    trees = 30,
     tree_depth = 10,  # Set your desired tree depth
     min_n = 5,       # Set your desired min_n
     learn_rate = 0.5, # Set your desired learn_rate
@@ -69,23 +77,18 @@ ggplot(vi_df, aes(x = reorder(Variable, Importance), y = Importance)) +
 xgb_pred <- predict(xgb_fit, new_data = test_data)
 
 # # Calculate performance metrics ----------------------------------------
-# predictions_xgb <- test_data %>%
-#   select(rent_full) %>%
-#   bind_cols(.pred = xgb_pred$.pred) %>%
-#   mutate(xgb_pred = round(.pred, 0))
-# 
+ predictions_xgb <- test_data %>%
+   select(rent_full) %>%
+   bind_cols(.pred = xgb_pred$.pred) %>%
+   mutate(xgb_pred = round(.pred, 0))
+
 # # Specify set of metrics to evaluate ----
-# multi_metric_xgb <- metric_set(rmse, mae, mape, rsq, huber_loss)
-# metrics_result_xgb <- multi_metric_xgb(predictions_xgb, truth = rent_full, estimate = xgb_pred)
+multi_metric_xgb <- metric_set(rmse, mae, mape, rsq, huber_loss)
+metrics_result_xgb <- multi_metric_xgb(predictions_xgb, truth = rent_full, estimate = xgb_pred)
 # 
 # # Print the metrics ----
-# print(metrics_result_xgb)
+print(metrics_result_xgb)
 
-# Calculate performance metrics ----
-rmse_result_xgb <- RMSE(xgb_pred$.pred, test_data$rent_full)
-
-# Print the metrics ----
-print(rmse_result_xgb)
 
 
 # End Parallelisation -----------------------------------------------------
